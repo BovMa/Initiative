@@ -27,7 +27,7 @@ export default function SwipeView({ jobs, onSwipe }: SwipeViewProps) {
 
   if (currentIndex >= jobs.length) {
     return (
-      <div className="flex flex-col items-center justify-center h-[600px] bg-white rounded-lg shadow-md p-8">
+      <div className="flex flex-col items-center justify-center h-[500px] bg-white rounded-lg shadow-md p-8">
         <h3 className="text-2xl font-bold text-gray-900 mb-4">No More Jobs</h3>
         <p className="text-gray-600 text-center mb-6">You've seen all available opportunities</p>
         <button
@@ -45,7 +45,7 @@ export default function SwipeView({ jobs, onSwipe }: SwipeViewProps) {
 
   return (
     <div className="max-w-lg mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="relative h-96">
+      <div className="relative h-64">
         <img
           src={currentJob.imageUrl}
           alt={currentJob.title}

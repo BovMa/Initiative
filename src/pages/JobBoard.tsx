@@ -55,27 +55,6 @@ export default function JobBoard() {
     });
   }, [query, filters]);
 
-  const renderJobView = () => {
-    switch (viewMode) {
-      case 'map':
-        return (
-          <div className="h-[calc(100vh-300px)]">
-            <JobMap jobs={filteredJobs} />
-          </div>
-        );
-      case 'swipe':
-        return <SwipeView jobs={filteredJobs} onSwipe={handleSwipe} />;
-      default:
-        return (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredJobs.map(job => (
-              <JobCard key={job.id} job={job} />
-            ))}
-          </div>
-        );
-    }
-  };
-
   return (
     <div>
       {/* Hero Section with Search and Filters */}
@@ -83,14 +62,16 @@ export default function JobBoard() {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col items-center space-y-6">
             <div className="text-center mb-2">
-              <h2 className="text-4xl font-bold mb-4">Find Your Purpose in Humanitarian Work</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Find Your Purpose in Humanitarian Work</h2>
               <p className="text-green-100 text-lg">Discover meaningful opportunities to make a difference globally</p>
             </div>
-            <div className="w-full max-w-4xl flex items-center space-x-4">
-              <div className="flex-grow">
+            <div className="w-full max-w-4xl flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <div className="w-full">
                 <SearchBar query={query} setQuery={setQuery} />
               </div>
-              <Filters filters={filters} onFilterChange={handleFilterChange} />
+              <div className="w-full sm:w-auto">
+                <Filters filters={filters} onFilterChange={handleFilterChange} />
+              </div>
             </div>
           </div>
         </div>
@@ -102,14 +83,34 @@ export default function JobBoard() {
           <ViewModeSelector currentMode={viewMode} onModeChange={setViewMode} />
         </div>
 
-        {renderJobView()}
+        <div className="relative">
+          {viewMode === 'map' && (
+            <div className="h-[calc(100vh-300px)] -mt-4 -mx-4 sm:mx-0 sm:rounded-lg overflow-hidden">
+              <JobMap jobs={filteredJobs} />
+            </div>
+          )}
 
-        {filteredJobs.length === 0 && (
-          <div className="text-center py-12">
-            <h3 className="text-xl font-medium text-gray-600">No jobs found matching your criteria</h3>
-            <p className="text-gray-500 mt-2">Try adjusting your search or filters</p>
-          </div>
-        )}
+          {viewMode === 'swipe' && (
+            <div className="max-w-lg mx-auto">
+              <SwipeView jobs={filteredJobs} onSwipe={handleSwipe} />
+            </div>
+          )}
+
+          {viewMode === 'list' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredJobs.map(job => (
+                <JobCard key={job.id} job={job} />
+              ))}
+            </div>
+          )}
+
+          {filteredJobs.length === 0 && (
+            <div className="text-center py-12">
+              <h3 className="text-xl font-medium text-gray-600">No jobs found matching your criteria</h3>
+              <p className="text-gray-500 mt-2">Try adjusting your search or filters</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

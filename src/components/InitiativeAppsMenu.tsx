@@ -1,8 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Grid } from 'lucide-react';
 
 export default function InitiativeAppsMenu() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const initiatives = [
     {
@@ -27,7 +39,7 @@ export default function InitiativeAppsMenu() {
   ];
 
   return (
-    <div className="relative">
+    <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="p-2 hover:bg-green-700 rounded-full transition-colors"
@@ -37,7 +49,7 @@ export default function InitiativeAppsMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg p-4 z-50">
+        <div className="absolute right-0 mt-2 w-[280px] sm:w-80 bg-white rounded-lg shadow-lg p-4 z-50">
           <div className="grid grid-cols-1 gap-2">
             {initiatives.map((initiative) => (
               <a
